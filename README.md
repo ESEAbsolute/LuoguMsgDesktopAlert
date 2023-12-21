@@ -1,33 +1,39 @@
-# Luogu Message Desktop Alert | 洛谷私信桌面通知
-将洛谷的私信以 Windows 通知形式提醒到桌面上。
+## Luogu Message Desktop Alert | 洛谷私信桌面通知
 
-此程序通过连接 websocket 监听洛谷私信频道，当收到私信时使用 Powershell 弹出系统通知提醒。
+version: 1.2
+
+此程序通过连接 websocket 监听洛谷私信频道，当收到私信时使用 node-notifier 弹出系统通知提醒。  
 适用于 Win10 / Win11 x64 系统，Win7 和 x86 系统无法保证可用，可以尝试自行编译。
 
 ---------------------------------------------------
-## 使用方法
 
-双击运行程序即可。
+## 更新日志
+
+v1.1: 支持断开连接后会自动重连；  
+v1.2: 新增点击通知跳转到私信界面功能和通知显示对方头像。
 
 ---------------------------------------------------
-## 前置文件
 
-请在程序所在文件夹同级额外放两个文件：
-1. ISRG Root X1.crt（洛谷的证书文件）；
-2. cookie.txt（默认为空），请填入你 cookie 里的 _uid 和 __client_id 部分，空格隔开。
+## 使用方法
+
+双击 .Start.cmd 文件运行。但请先完成下面的要求：
+
+请在 Require 文件夹内放两个文件。
+
+一个是 ISRG Root X1.crt（洛谷的证书文件，压缩包内已提供）；  
+另一个是 cookie.txt，请填入你 cookie 里的 _uid 和 __client_id 部分，用空格或回车隔开。
 
 查看 cookie 的方法可以自行在浏览器搜索，通常为 F12 - 应用 - 存储 - Cookie（在 Chrome 下是这样的）。
 
 ---------------------------------------------------
+
 ## Q & A
 
 ### 怎么样才算运行成功？
 
-运行成功的标志：不闪退，且显示了形如「`Received message:{...... ......"result":"success","type":"result","welcome_message":""}`」的内容。
-
-若程序闪退，请检查证书文件（同级文件夹下的 ISRG Root X1.crt）以及你是否联网了。
-
-若没有 welcome_message，你的 cookie.txt 并未正确填写。格式是一个整数和一个长度为 40 的字符串，用空格隔开。
+运行成功的标志：显示「Login successfully! Timing start!」。
+若程序直接结束，请检查证书文件（同级文件夹下的 ISRG Root X1.crt）。
+若程序报错后退出，cookie.txt 可能并未正确填写。格式是一个整数，一个长度为 40 的字符串，用空格或换行隔开。
 
 ### 这个程序安全吗？
 
@@ -39,12 +45,14 @@
 
 ---------------------------------------------------
 
-### 自行编译
+## 自行编译
 
-双击 Compile.bat 进行编译（需要较长时间）。
+源代码和编译脚本在 Source 文件夹内。双击 Compile.bat 进行编译（需要较长时间）。
 
-编译程序需要配置 openssl, websocketpp, boost 和 nlohmann/json.hpp。若未配置好所需的库和头文件，程序会编译失败。
+编译 .cpp 程序需要配置 cpp-httplib, openssl, websocketpp, boost 和 nlohmann/json.hpp。若未配置好所需的库和头文件，程序会编译失败。
+
+打包 .js 程序需要安装 node.js 18。其他版本大概也可以，我不确定。
 
 ---------------------------------------------------
 
-### 联系方式：[洛谷 uid=361833](https://www.luogu.com.cn/chat?uid=361833)。欢迎反馈问题以及提出更人性化的建议。
+联系方式：[Github Issues](https://github.com/ESEAbsolute/LuoguMsgDesktopAlert/issues/new) 或 [洛谷 uid=361833](https://www.luogu.com.cn/chat?uid=361833)。欢迎反馈问题以及提出更人性化的建议。
