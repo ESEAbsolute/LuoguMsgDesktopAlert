@@ -1,47 +1,41 @@
-const notifier = require("node-notifier");
-const opn = require("opn");
+const nodeNotifier = require('node-notifier');
+const minimist = require('minimist');
 
-function notify(appName, title, content, icon, trigger) {
-  notifier.notify(
-    {
-      appName: appName,
-      title: title,
-      message: content,
-      icon: icon,
-      sound: true,
-      wait: true,
-    },
-    (error, response, metadata) => {
+// Use dynamic import for 'open'
+let openModule;
+
+async function importOpenModule() {
+  openModule = await import('open');
+}
+
+async function notify(appName, title, content, icon, trigger) {
+  nodeNotifier.notify(
+    { appName: appName, title: title, message: content, icon: icon, sound: true, wait: true },
+    async (error, response, metadata) => {
       if (!error) {
-        if (response == "activate" && metadata.activationType == "clicked") {
-          console.log("clicked");
-          if (trigger != "SP:NOTRIGGER") { opn(trigger); }
-        } else if (response == undefined) {
-          console.log("undifined response -> clicked");
-          if (trigger != "SP:NOTRIGGER") { opn(trigger); }
-        } else {
-          console.log("response:", response);
-          console.log("metadata.activationType:", metadata.activationType);
+        if ((response === "activate" && metadata.activationType === "clicked") || response === undefined) {
+          if (trigger !== "SP:NOTRIGGER") {
+            if (!openModule) {
+              await importOpenModule();
+            }
+            await openModule.default(trigger);
+          }
         }
-      } else {
-        console.error("Notification error:", error);
       }
     }
   );
 }
-const args = require('minimist')(process.argv.slice(2));
-if (
-  args['appName'] != undefined &&
-  args['title'] != undefined &&
-  args['content'] != undefined &&
-  args['icon'] != undefined
-) {
-  if (args['trigger'] == undefined) {
-    notify (args['appName'], args['title'], args['content'], args['icon'], "SP:NOTRIGGER");
+
+async function main() {
+  const args = minimist(process.argv.slice(2));
+  
+  if (args['appName'] != undefined && args['title'] != undefined && args['content'] != undefined && args['icon'] != undefined) {
+    const trigger = args['trigger'] || "SP:NOTRIGGER";
+    await notify(args['appName'], args['title'], args['content'], args['icon'], trigger);
   } else {
-    notify (args['appName'], args['title'], args['content'], args['icon'], args['trigger']);
+    console.error("Invalid arguments.");
+    console.error("Usage: programName --appName=appName(string) --title=title(string) --content=content(string) --icon=icon(string: pathToFile / \"undefined\") [--trigger=trigger(string: app/link)]");
   }
-} else {
-  console.error("Invalid arguments.");
-  console.error("Usage: programName --appName=appName(string) --title=title(string) --content=content(string) --icon=icon(string: pathToFile / \"undefined\") [--trigger=trigger(string: app/link)]");
 }
+
+main().catch(console.error);
