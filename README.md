@@ -1,58 +1,20 @@
-## Luogu Message Desktop Alert | 洛谷私信桌面通知
+使用前请在 cookie.txt 里填入洛谷的 __uid __client_id。需要登录。
 
-version: 1.2
+查看 cookie：F12 - 应用 - 存储 - Cookie
 
-此程序通过连接 websocket 监听洛谷私信频道，当收到私信时使用 node-notifier 弹出系统通知提醒。  
-适用于 Win10 / Win11 x64 系统，Win7 和 x86 系统无法保证可用，可以尝试自行编译。
+双击 main.exe 打开
 
----------------------------------------------------
+编译 .cpp 程序需要配置 cpp-httplib, openssl, websocketpp, boost 和 nlohmann/json.hpp。若未配置好所需的库和头文件，程序会编译失败。打包 .js 程序需要安装 node.js 18。其他版本大概也可以，我不确定。
 
-## 更新日志
+----------
 
-v1.1: 支持断开连接后会自动重连；  
-v1.2: 新增点击通知跳转到私信界面功能和通知显示对方头像。
+依赖：
+- [cpp-httplib](https://github.com/yhirose/cpp-httplib): `benchmark/cpp-httplib-base/httplib.h`
+- [json](https://github.com/nlohmann/json): `include/nlohmann`
+- [websocketpp](https://github.com/zaphoyd/websocketpp): `websocketpp`
+  - [Boost](https://github.com/boostorg): [1.86.0](https://archives.boost.io/release/1.86.0/source/boost_1_86_0.zip)
+  - [openssl](https://github.com/openssl/openssl): [Win64 OpenSSL v3.3.2](https://slproweb.com/products/Win32OpenSSL.html)
+- [fmt](https://github.com/fmtlib/fmt): `include/fmt`
+- [imgui](https://github.com/ocornut/imgui): GLFW x OpenGL3
+  - [GLFW](https://github.com/glfw/glfw): `include/GLFW`
 
----------------------------------------------------
-
-## 使用方法
-
-双击 .Start.cmd 文件运行。但请先完成下面的要求：
-
-请在 Require 文件夹内放两个文件。
-
-一个是 ISRG Root X1.crt（洛谷的证书文件，压缩包内已提供）；  
-另一个是 cookie.txt，请填入你 cookie 里的 _uid 和 __client_id 部分，用空格或回车隔开。
-
-查看 cookie 的方法可以自行在浏览器搜索，通常为 F12 - 应用 - 存储 - Cookie（在 Chrome 下是这样的）。
-
----------------------------------------------------
-
-## Q & A
-
-### 怎么样才算运行成功？
-
-运行成功的标志：显示「Login successfully! Timing start!」。
-若程序直接结束，请检查证书文件（同级文件夹下的 ISRG Root X1.crt）。
-若程序报错后退出，cookie.txt 可能并未正确填写。格式是一个整数，一个长度为 40 的字符串，用空格或换行隔开。
-
-### 这个程序安全吗？
-
-如果你不保证安全性，你可以不去使用，或者你可以检查我的源代码，自行配置环境并编译程序，教程在下面。
-
-### 我不想让这个程序占用我的任务栏。
-
-你可以自行添加隐藏窗口的代码，也可以使用第三方软件如 QuickHider，也可以把程序窗口拖到另一个桌面来达成隐藏目的。我并不打算添加。
-
----------------------------------------------------
-
-## 自行编译
-
-源代码和编译脚本在 Source 文件夹内。双击 Compile.bat 进行编译（需要较长时间）。
-
-编译 .cpp 程序需要配置 cpp-httplib, openssl, websocketpp, boost 和 nlohmann/json.hpp。若未配置好所需的库和头文件，程序会编译失败。
-
-打包 .js 程序需要安装 node.js 18。其他版本大概也可以，我不确定。
-
----------------------------------------------------
-
-联系方式：[Github Issues](https://github.com/ESEAbsolute/LuoguMsgDesktopAlert/issues/new) 或 [洛谷 uid=361833](https://www.luogu.com.cn/chat?uid=361833)。欢迎反馈问题以及提出更人性化的建议。
